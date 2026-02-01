@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("v1/patient")
@@ -23,4 +24,20 @@ public class PatientController {
     public ResponseEntity<List<Patient>> getPatient(){
         return ResponseEntity.ok(patientService.getPatient());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Patient>> getById(@PathVariable Long id){
+        return ResponseEntity.ok(patientService.getPatientById(id));
+    }
+
+    @PutMapping("/updatePatient/{id}")
+    public ResponseEntity<Patient> updatePatient(@RequestBody Patient patient,@PathVariable Long id){
+        return ResponseEntity.ok(patientService.updatePatient(patient,id));
+    }
+    @DeleteMapping("/deletePatient/{id}")
+    public ResponseEntity<String> deletePatient(@PathVariable Long id) {
+        patientService.deletePatient(id);
+        return ResponseEntity.ok("Patient deleted successfully");
+    }
+
 }
