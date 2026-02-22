@@ -1,11 +1,11 @@
 package com.example.database.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
+@Table(name = "doctors")
 public class Doctor {
 
     @Id
@@ -13,8 +13,35 @@ public class Doctor {
     private Long id;
 
     private String name;
+
     private String specialization;
+
     private int age;
+
+    private int experience;   // Years of experience
+
+    private String phone;
+
+    private String email;
+
+    private BigDecimal consultationFee;
+
+    // Doctor available days (MONDAY, TUESDAY…)
+    @ElementCollection
+    @CollectionTable(
+            name = "doctor_available_days",
+            joinColumns = @JoinColumn(name = "doctor_id")
+    )
+    @Column(name = "available_day")
+    private List<String> availableDays;
+
+    // ================= RELATIONSHIPS =================
+
+    // One Doctor → Many Appointments
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    private List<Appointment> appointments;
+
+    // ================= GETTERS & SETTERS =================
 
     public Long getId() {
         return id;
@@ -46,5 +73,53 @@ public class Doctor {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public BigDecimal getConsultationFee() {
+        return consultationFee;
+    }
+
+    public void setConsultationFee(BigDecimal consultationFee) {
+        this.consultationFee = consultationFee;
+    }
+
+    public List<String> getAvailableDays() {
+        return availableDays;
+    }
+
+    public void setAvailableDays(List<String> availableDays) {
+        this.availableDays = availableDays;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 }

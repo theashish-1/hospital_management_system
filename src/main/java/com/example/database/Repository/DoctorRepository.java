@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface DoctorRepository extends JpaRepository<Doctor,Long> {
     List<Doctor> findBySpecializationIgnoreCase(String specialization);
-
+    List<Doctor> findByExperience(int experience);
 
 }

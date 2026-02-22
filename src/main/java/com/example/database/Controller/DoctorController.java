@@ -44,6 +44,10 @@ public class DoctorController {
     public ResponseEntity<List<Doctor>> getBySpecialization(@PathVariable String specialization) {
         return ResponseEntity.ok(doctorService.getDoctorsBySpecialization(specialization));
     }
+    @GetMapping("/experience/{year}")
+    public ResponseEntity<List<Doctor>> getDoctorByYearOfExperience(@PathVariable int year){
+        return ResponseEntity.ok(doctorService.getDoctorByYearOfExperience(year));
+    }
 
 
 
