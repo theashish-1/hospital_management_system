@@ -43,20 +43,20 @@ public class Appointment {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AppointmentStatus status;
-    // BOOKED / CANCELLED / COMPLETED
+    // BOOKED,CANCELLED,COMPLETED
 
     private String reason;
-    // Patient visit reason
+    // Patient visiting reason
 
     private String remarks;
     // Doctor notes
 
-    // ================= BILL RELATION =================
+    // BILL RELATION
 
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL)
     private Bill bill;
 
-    // ================= GETTERS & SETTERS =================
+
 
     public Long getId() {
         return id;

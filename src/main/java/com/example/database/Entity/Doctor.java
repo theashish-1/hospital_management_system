@@ -18,7 +18,7 @@ public class Doctor {
 
     private int age;
 
-    private int experience;   // Years of experience
+    private int experience;
 
     private String phone;
 
@@ -26,7 +26,7 @@ public class Doctor {
 
     private BigDecimal consultationFee;
 
-    // Doctor available days (MONDAY, TUESDAY…)
+    //doctor available days
     @ElementCollection
     @CollectionTable(
             name = "doctor_available_days",

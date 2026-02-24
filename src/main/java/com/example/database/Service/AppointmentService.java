@@ -29,6 +29,15 @@ public class AppointmentService {
                 .orElseThrow( ()-> new RuntimeException("patient not fount"));
         Doctor doctor = doctorRepository.findById(appointment.getDoctor_id())
                 .orElseThrow( ()-> new RuntimeException("doctor not found"));
+        boolean isAppointmentPresent = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTime(doctor.getId(),appointment.getDate(), appointment.getTime());
+        if (isAppointmentPresent){
+            throw new RuntimeException("appointment already booked ");
+        }
+        String selectedDay = appointment.getDate().getDayOfWeek().name();
+        boolean doctorAvailableDay = doctor.getAvailableDays().contains(selectedDay);
+        if(doctorAvailableDay == false){
+            throw new RuntimeException("Doctor not available on "+selectedDay);
+        }
 
         Appointment appointment1 = new Appointment();
         appointment1.setPatient(patient);
