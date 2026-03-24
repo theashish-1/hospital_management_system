@@ -43,7 +43,7 @@ public class Bill {
 
     private LocalDate billDate;
 
-    // ================= GETTERS & SETTERS =================
+    // GETTERS AND SETTERS
 
     public Long getId() {
         return id;

@@ -3,6 +3,7 @@ package com.example.database.Controller;
 import com.example.database.Entity.Doctor;
 import com.example.database.Service.DoctorService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class DoctorController {
     public DoctorController(DoctorService doctorService){
         this.doctorService = doctorService;
     }
-
+//    @PreAuthorize("hasRole('ADMIN')"")
     @PostMapping("/addDoctor")
     public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor){
         return ResponseEntity.ok(doctorService.addDoctor(doctor));

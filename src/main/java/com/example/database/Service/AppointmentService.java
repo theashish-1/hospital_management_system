@@ -29,7 +29,11 @@ public class AppointmentService {
                 .orElseThrow( ()-> new RuntimeException("patient not fount"));
         Doctor doctor = doctorRepository.findById(appointment.getDoctor_id())
                 .orElseThrow( ()-> new RuntimeException("doctor not found"));
-        boolean isAppointmentPresent = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTime(doctor.getId(),appointment.getDate(), appointment.getTime());
+        //below sql query is StatusNot hence if appointment status is cancelled isAppointmentPresent will be true
+        boolean isAppointmentPresent = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatusNot(doctor.getId(),
+                appointment.getDate(),
+                appointment.getTime(),
+                AppointmentStatus.CANCELLED);
         if (isAppointmentPresent){
             throw new RuntimeException("appointment already booked ");
         }
@@ -62,4 +66,11 @@ public class AppointmentService {
     }
 
 
+    public void cancelAppointment(Long id) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow( ()-> new RuntimeException("Appointment not found"));
+        appointment.setStatus(AppointmentStatus.CANCELLED);
+        appointmentRepository.save(appointment);
+
+    }
 }

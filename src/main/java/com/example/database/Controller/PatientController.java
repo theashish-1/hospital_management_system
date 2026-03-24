@@ -1,5 +1,7 @@
 package com.example.database.Controller;
 
+import com.example.database.DTO.PatientEntryDTO;
+import com.example.database.DTO.PatientResponseDTO;
 import com.example.database.Entity.Patient;
 import com.example.database.Service.PatientService;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +19,16 @@ public class PatientController {
     }
 
     @PostMapping("/addPatient")
-    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient){
-        return ResponseEntity.ok(patientService.addPatient(patient));
+    public ResponseEntity<PatientResponseDTO> addPatient(@RequestBody PatientEntryDTO patientEntryDTO){
+        return ResponseEntity.ok(patientService.addPatient(patientEntryDTO));
     }
     @GetMapping("/patients")
-    public ResponseEntity<List<Patient>> getPatient(){
+    public ResponseEntity<List<PatientResponseDTO>> getPatient(){
         return ResponseEntity.ok(patientService.getPatient());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Patient>> getById(@PathVariable Long id){
+    public ResponseEntity<PatientResponseDTO> getById(@PathVariable Long id){
         return ResponseEntity.ok(patientService.getPatientById(id));
     }
 
