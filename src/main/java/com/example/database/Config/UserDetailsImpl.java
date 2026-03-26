@@ -21,16 +21,20 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(() -> "ROLE_" + user.getRole().name());
     }
 
     @Override
     public @Nullable String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return user.getUsername();
+    }
+
+    public User getUser() {
+        return user;
     }
 }
