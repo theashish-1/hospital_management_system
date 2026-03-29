@@ -1,5 +1,6 @@
 package com.example.database.Service;
 
+import com.example.database.Config.JwtUtil;
 import com.example.database.Config.UserDetailsImpl;
 import com.example.database.DTO.LoginRequestDTO;
 import com.example.database.DTO.LoginResponseDTO;
@@ -28,6 +29,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
+
+    private final JwtUtil jwtUtil;
 
 
     public SignupResponseDTO signUp(SignupRequestDTO signupRequestDTO) {
@@ -61,7 +64,7 @@ public class AuthService {
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
-        System.out.println("loginresponse");
+//        System.out.println("loginresponse");
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -77,6 +80,7 @@ public class AuthService {
             LoginResponseDTO loginResponse = new LoginResponseDTO();
             loginResponse.setUsername(user.getUsername());
             loginResponse.setRole(user.getRole());
+            loginResponse.setUserId(user.getId());
 
             if (user.getPatient() != null) {
                 loginResponse.setPatientId(user.getPatient().getId());
@@ -85,6 +89,8 @@ public class AuthService {
             if (user.getDoctor() != null) {
                 loginResponse.setDoctorId(user.getDoctor().getId());
             }
+            String token = jwtUtil.generateAccessToken(user);
+            loginResponse.setToken(token);
 
             return loginResponse;
 

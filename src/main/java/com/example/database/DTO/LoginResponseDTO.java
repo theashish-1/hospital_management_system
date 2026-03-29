@@ -13,6 +13,7 @@ public class LoginResponseDTO {
     private Long userId;
     private String Username;
     private Role Role;
+    private String token;
     private Long patientId;
     private Long doctorId;
 }
