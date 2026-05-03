@@ -10,7 +10,10 @@ import com.example.database.Repository.BillRepository;
 import com.example.database.Repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+<<<<<<< HEAD
 import org.springframework.transaction.annotation.Transactional;
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,7 +29,10 @@ public class BillService {
     AppointmentRepository appointmentRepository;
     @Autowired
     BillRepository billRepository;
+<<<<<<< HEAD
     @Transactional
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     public BillResponseDTO generateBillOfPatient(BillRequestDTO billRequestDTO) {
         System.out.println("inside service ");
         Appointment appointment = appointmentRepository.findById(billRequestDTO.getAppointment_id())

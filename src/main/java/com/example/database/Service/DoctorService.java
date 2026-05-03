@@ -1,5 +1,6 @@
 package com.example.database.Service;
 
+<<<<<<< HEAD
 import com.example.database.DTO.DoctorProfileResponseDTO;
 import com.example.database.DTO.DoctorProfileUpdateDTO;
 import com.example.database.DTO.DoctorRequestDTO;
@@ -92,6 +93,28 @@ public class DoctorService {
         }
 
         return doctorViewResponseDTOList;
+=======
+import com.example.database.Entity.Doctor;
+import com.example.database.Repository.DoctorRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class DoctorService {
+
+    private final DoctorRepository doctorRepository;
+    public DoctorService(DoctorRepository doctorRepository){
+        this.doctorRepository = doctorRepository;
+    }
+    public Doctor addDoctor(Doctor doctor) {
+        return doctorRepository.save(doctor);
+    }
+
+    public List<Doctor> getDoctors() {
+        return doctorRepository.findAll();
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     }
 
     public Optional<Doctor> getDoctorByid(Long id) {
@@ -120,6 +143,7 @@ public class DoctorService {
     public List<Doctor> getDoctorByYearOfExperience(int year) {
         return doctorRepository.findByExperience(year);
     }
+<<<<<<< HEAD
 
 
     @Transactional
@@ -154,4 +178,6 @@ public class DoctorService {
                 .availableDays(savedDoctor.getAvailableDays())
                 .build();
     }
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 }

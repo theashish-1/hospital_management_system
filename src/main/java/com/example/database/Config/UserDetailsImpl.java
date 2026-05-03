@@ -1,15 +1,22 @@
 package com.example.database.Config;
 
 import com.example.database.Entity.User;
+<<<<<<< HEAD
 import com.example.database.Entity.type.Role;
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+<<<<<<< HEAD
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+=======
+import java.util.List;
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 
 public class UserDetailsImpl implements UserDetails {
     private String username;
@@ -22,6 +29,7 @@ public class UserDetailsImpl implements UserDetails {
 
     }
 
+<<<<<<< HEAD
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -30,6 +38,11 @@ public class UserDetailsImpl implements UserDetails {
             authorities.add(()-> "ROLE_" + role.name());
         });
         return authorities;
+=======
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(() -> "ROLE_" + user.getRole().name());
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     }
 
     @Override

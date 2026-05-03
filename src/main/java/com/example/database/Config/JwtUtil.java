@@ -1,23 +1,35 @@
 package com.example.database.Config;
 
 import com.example.database.Entity.User;
+<<<<<<< HEAD
 import com.example.database.Entity.type.AuthProviderType;
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+<<<<<<< HEAD
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+=======
+import org.springframework.beans.factory.annotation.Value;
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+<<<<<<< HEAD
 import java.util.List;
 
 @Component
 @Slf4j
+=======
+
+@Component
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 public class JwtUtil {
 
     @Value("${jwtSecretKey}")
@@ -30,6 +42,7 @@ public class JwtUtil {
     }
 
     public String generateAccessToken(User user) {
+<<<<<<< HEAD
 
         List<String> roles = user.getRoles().stream()
                 .map(role -> "ROLE_"+role.name())
@@ -38,6 +51,11 @@ public class JwtUtil {
                 .setSubject(user.getUsername())
                 .claim("userId", user.getId().toString())
                 .claim("roles",roles)
+=======
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .claim("userId", user.getId().toString())
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512) // Explicitly set algorithm
@@ -54,6 +72,7 @@ public class JwtUtil {
 
         return claims.getSubject();
     }
+<<<<<<< HEAD
 
     public List<String> getRolesFromToken(String token){
         Claims claims = Jwts.parserBuilder()
@@ -105,4 +124,6 @@ public class JwtUtil {
         };
     }
 
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 }

@@ -1,10 +1,13 @@
 package com.example.database.Controller;
 
+<<<<<<< HEAD
 import com.example.database.DTO.DoctorProfileResponseDTO;
 import com.example.database.DTO.DoctorProfileUpdateDTO;
 import com.example.database.DTO.DoctorRequestDTO;
 import com.example.database.DTO.DoctorResponseDTO;
 import com.example.database.DTO.DoctorViewResponseDTO;
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 import com.example.database.Entity.Doctor;
 import com.example.database.Service.DoctorService;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,7 @@ public class DoctorController {
     public DoctorController(DoctorService doctorService){
         this.doctorService = doctorService;
     }
+<<<<<<< HEAD
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addDoctor")
     public ResponseEntity<DoctorResponseDTO> addDoctor(@RequestBody DoctorRequestDTO doctorRequestDTO){
@@ -30,6 +34,15 @@ public class DoctorController {
     @PreAuthorize("hasAnyRole('ADMIN', 'PATIENT', 'DOCTOR')")
     @GetMapping("/doctorList")
     public ResponseEntity<List<DoctorViewResponseDTO>> getDoctor(){
+=======
+//    @PreAuthorize("hasRole('ADMIN')"")
+    @PostMapping("/addDoctor")
+    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor){
+        return ResponseEntity.ok(doctorService.addDoctor(doctor));
+    }
+    @GetMapping("/doctorList")
+    public ResponseEntity<List<Doctor>> getDoctor(){
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
         return ResponseEntity.ok(doctorService.getDoctors());
     }
 
@@ -37,7 +50,10 @@ public class DoctorController {
     public ResponseEntity<Optional<Doctor>> getSpecificDoctor(@PathVariable Long id){
         return ResponseEntity.ok(doctorService.getDoctorByid(id));
     }
+<<<<<<< HEAD
     @PreAuthorize("hasRole('ADMIN')")   
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     @PutMapping("/updateDoctor/{id}")
     public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor,@PathVariable Long id){
         return ResponseEntity.ok(doctorService.updateDoctor(doctor,id));
@@ -56,12 +72,15 @@ public class DoctorController {
     public ResponseEntity<List<Doctor>> getDoctorByYearOfExperience(@PathVariable int year){
         return ResponseEntity.ok(doctorService.getDoctorByYearOfExperience(year));
     }
+<<<<<<< HEAD
     @PreAuthorize("hasRole('DOCTOR') and #id == authentication.principal.id")
     @PutMapping("/{id}/updateProfile")
     public ResponseEntity<DoctorProfileResponseDTO> updateDoctorProfile(@PathVariable Long id, @RequestBody DoctorProfileUpdateDTO doctorProfileUpdateDTO){
         DoctorProfileResponseDTO profileResponseDTO = doctorService.updateDoctorProfile(id,doctorProfileUpdateDTO);
         return ResponseEntity.ok(profileResponseDTO);
     }
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 
 
 

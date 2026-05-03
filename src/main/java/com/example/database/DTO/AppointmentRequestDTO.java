@@ -49,6 +49,9 @@ public class AppointmentRequestDTO {
 
     public void setReason(String reason) {
         this.reason = reason;
+<<<<<<< HEAD
         
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     }
 }

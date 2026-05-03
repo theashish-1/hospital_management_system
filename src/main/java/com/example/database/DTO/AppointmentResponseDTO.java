@@ -98,6 +98,9 @@ public class AppointmentResponseDTO {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+<<<<<<< HEAD
         
+=======
+>>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     }
 }
