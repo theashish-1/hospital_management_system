@@ -1,16 +1,12 @@
 package com.example.database.Entity;
 
-<<<<<<< HEAD
 import com.example.database.Entity.type.AuthProviderType;
-=======
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 import com.example.database.Entity.type.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-<<<<<<< HEAD
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,13 +19,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-=======
-import lombok.NoArgsConstructor;
-
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 public class User {
 
     @Id
@@ -42,7 +31,6 @@ public class User {
    @Column(nullable = false)
    private String password;
 
-<<<<<<< HEAD
    @ElementCollection(fetch = FetchType.EAGER)
    @Enumerated(EnumType.STRING)
    Set<Role> roles = new HashSet<>();
@@ -63,15 +51,6 @@ public class User {
     // any action on the parent will automatically apply to its child entities.
 
 
-=======
-   @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @OneToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     public Patient getPatient() {
         return patient;
     }
@@ -88,13 +67,8 @@ public class User {
         this.doctor = doctor;
     }
 
-<<<<<<< HEAD
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-=======
-    @OneToOne
-    @JoinColumn(name = "doctor_id")
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     private Doctor doctor;
 
     public Long getId() {
@@ -121,7 +95,6 @@ public class User {
         this.password = password;
     }
 
-<<<<<<< HEAD
     public Set<Role> getRoles() {
         return roles;
     }
@@ -129,15 +102,4 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-=======
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 }

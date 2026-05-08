@@ -14,11 +14,9 @@ public class LoginResponseDTO {
     private String Username;
     private Role Role;
     private String token;
+    private String refreshToken;
     private Long patientId;
     private Long doctorId;
-<<<<<<< HEAD
     private String providerId;
 
-=======
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 }

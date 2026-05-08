@@ -2,7 +2,6 @@ package com.example.database.DTO;
 
 import com.example.database.Entity.type.BloodGroupType;
 
-<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,11 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PatientEntryDTO {
     private Long userId;
-=======
-import java.time.LocalDate;
-
-public class PatientEntryDTO {
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     private String name;
     private int age;
     private String address;
@@ -28,7 +22,6 @@ public class PatientEntryDTO {
     private BloodGroupType bloodGroup;
     private String phone;
 
-<<<<<<< HEAD
     public Long getuserId() {
         return userId;
     }
@@ -37,8 +30,6 @@ public class PatientEntryDTO {
         userId = id;
     }
 
-=======
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     public String getName() {
         return name;
     }

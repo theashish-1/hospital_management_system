@@ -1,10 +1,6 @@
 package com.example.database.DTO;
 
 public class PatientResponseDTO {
-<<<<<<< HEAD
-
-=======
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     private String name;
     private int age;
     private String gender;

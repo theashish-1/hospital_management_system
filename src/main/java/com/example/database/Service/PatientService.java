@@ -1,7 +1,6 @@
 package com.example.database.Service;
 
 import com.example.database.DTO.PatientEntryDTO;
-<<<<<<< HEAD
 import com.example.database.DTO.PatientProfileResponse;
 import com.example.database.DTO.PatientProfileUpdateDTO;
 import com.example.database.DTO.PatientResponseDTO;
@@ -16,12 +15,6 @@ import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.jspecify.annotations.Nullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-=======
-import com.example.database.DTO.PatientResponseDTO;
-import com.example.database.Entity.Patient;
-import com.example.database.Repository.PatientRepository;
-import org.springframework.http.ResponseEntity;
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-<<<<<<< HEAD
 @RequiredArgsConstructor
 public class PatientService {
 
@@ -56,16 +48,6 @@ public class PatientService {
             .orElse(new Patient());
         // Patient patient = new Patient();
         patient.setUser(targetUser);
-=======
-public class PatientService {
-
-    private final PatientRepository patientRepository;
-    public PatientService(PatientRepository patientRepository){
-        this.patientRepository = patientRepository;
-    }
-    public PatientResponseDTO addPatient(PatientEntryDTO patientEntryDTO) {
-        Patient patient = new Patient();
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
         patient.setGender(patientEntryDTO.getGender());
         patient.setAge(patientEntryDTO.getAge());
         patient.setName(patientEntryDTO.getName());
@@ -136,7 +118,6 @@ public class PatientService {
     public void deletePatient(Long id) {
         patientRepository.deleteById(id);
     }
-<<<<<<< HEAD
 
     public PatientProfileResponse updatePatientProfile(PatientProfileUpdateDTO patientProfileUpdateDTO,Long id) {
         System.out.println("blood_group"+patientProfileUpdateDTO.getBloodGroupType());
@@ -171,6 +152,4 @@ public class PatientService {
                 .registrationDate(savedPatient.getGender())
                 .build();
     }
-=======
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 }

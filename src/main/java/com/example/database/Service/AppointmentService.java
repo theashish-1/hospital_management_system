@@ -9,7 +9,6 @@ import com.example.database.Entity.type.AppointmentStatus;
 import com.example.database.Repository.AppointmentRepository;
 import com.example.database.Repository.DoctorRepository;
 import com.example.database.Repository.PatientRepository;
-<<<<<<< HEAD
 import com.nimbusds.openid.connect.sdk.rp.ApplicationType;
 
 import java.util.List;
@@ -19,9 +18,6 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-=======
-import org.springframework.beans.factory.annotation.Autowired;
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,14 +45,9 @@ public class AppointmentService {
         if (isAppointmentPresent){
             throw new RuntimeException("appointment already booked ");
         }
-<<<<<<< HEAD
         String selectedDay = appointment.getDate().getDayOfWeek().name().toLowerCase();
         boolean doctorAvailableDay = doctor.getAvailableDays().stream()
                 .anyMatch(day -> day.equalsIgnoreCase(selectedDay));
-=======
-        String selectedDay = appointment.getDate().getDayOfWeek().name();
-        boolean doctorAvailableDay = doctor.getAvailableDays().contains(selectedDay);
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
         if(doctorAvailableDay == false){
             throw new RuntimeException("Doctor not available on "+selectedDay);
         }
@@ -91,7 +82,6 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
 
     }
-<<<<<<< HEAD
 
 
     public String confirmAppointment(Long id) {
@@ -144,6 +134,4 @@ public class AppointmentService {
         appointmentRepository.save(curAppointment);
         return "Appointment rejected";
     }
-=======
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 }

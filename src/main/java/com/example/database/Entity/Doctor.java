@@ -9,10 +9,6 @@ import java.util.List;
 public class Doctor {
 
     @Id
-<<<<<<< HEAD
-=======
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     private Long id;
 
     private String name;
@@ -44,14 +40,11 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
 
-<<<<<<< HEAD
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     private User user;
 
-=======
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
     // ================= GETTERS & SETTERS =================
 
     public Long getId() {
@@ -133,7 +126,6 @@ public class Doctor {
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
     }
-<<<<<<< HEAD
 
     public User getUser() {
         return user;
@@ -142,6 +134,4 @@ public class Doctor {
     public void setUser(User user) {
         this.user = user;
     }
-=======
->>>>>>> 46cbaac4155ca17de5d9faae764d05bf320feb38
 }
