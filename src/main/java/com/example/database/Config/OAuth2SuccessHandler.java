@@ -99,7 +99,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String registrationId = token.getAuthorizedClientRegistrationId();
 
         // 3. Get the DTO from your service
-        LoginResponseDTO loginResponse = authService.handleoAuth2LoginRequest(oAuth2User, registrationId);
+        LoginResponseDTO loginResponse = authService.handleoAuth2LoginRequest(oAuth2User, registrationId,response);
 
         // 4. Manual JSON Write
         response.setStatus(HttpServletResponse.SC_OK);

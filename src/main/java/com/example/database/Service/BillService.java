@@ -28,7 +28,7 @@ public class BillService {
     BillRepository billRepository;
     @Transactional
     public BillResponseDTO generateBillOfPatient(BillRequestDTO billRequestDTO) {
-        System.out.println("inside service ");
+        // System.out.println("inside service ");
         Appointment appointment = appointmentRepository.findById(billRequestDTO.getAppointment_id())
                 .orElseThrow( ()-> new RuntimeException("Appointment does not exist "));
         Patient patient = patientRepository.findById(appointment.getPatient().getId())

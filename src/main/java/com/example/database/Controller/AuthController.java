@@ -5,8 +5,11 @@ import com.example.database.DTO.LoginResponseDTO;
 import com.example.database.DTO.SignupRequestDTO;
 import com.example.database.DTO.SignupResponseDTO;
 import com.example.database.Service.AuthService;
+
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +26,20 @@ public class AuthController {
          return ResponseEntity.ok(authService.signUp(signupRequestDTO));
     }
     @PostMapping("/login")
-    public  ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO){
-        return ResponseEntity.ok(authService.login(loginRequestDTO));
+    public  ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO
+        ,HttpServletResponse response
+    ){
+        return ResponseEntity.ok(authService.login(loginRequestDTO,response));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponseDTO> refresh(
+        @CookieValue(name = "refreshToken", required = false) String refreshToken, 
+        HttpServletResponse response
+    ) {
+        if (refreshToken == null) {
+            return ResponseEntity.status(400).body(null); // This will return a 400 instead of redirecting to Google
+        }
+        return ResponseEntity.ok(authService.refreshToken(refreshToken, response));
     }
 }

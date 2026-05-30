@@ -188,6 +188,9 @@ import com.example.database.Entity.type.AuthProviderType;
 import com.example.database.Entity.type.Role;
 import com.example.database.Repository.RefreshTokenRepository;
 import com.example.database.Repository.UserRepository;
+
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -218,6 +221,8 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final CookieService cookieService;
+
 
     /**
      * 1. NORMAL SIGNUP (via Form/Postman)
@@ -264,20 +269,20 @@ public class AuthService {
     /**
      * 2. NORMAL LOGIN (via Form/Postman)
      */
-    public LoginResponseDTO login(LoginRequestDTO request) {
+    public LoginResponseDTO login(LoginRequestDTO request, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return mapToLoginResponse(userDetails.getUser());
+        return mapToLoginResponse(userDetails.getUser(),response);
     }
 
     /**
      * 3. OAUTH2 LOGIN/SIGNUP (Google/GitHub)
      */
     @Transactional
-    public LoginResponseDTO handleoAuth2LoginRequest(OAuth2User oAuth2User, String registrationId) {
+    public LoginResponseDTO handleoAuth2LoginRequest(OAuth2User oAuth2User, String registrationId,HttpServletResponse response) {
         AuthProviderType providerType = jwtUtil.getProviderTypeFromRegistrationId(registrationId);
         String providerId = jwtUtil.determineProviderIdFromOAuth2User(oAuth2User, registrationId);
         String email = jwtUtil.determineUsernameFromOAuth2User(oAuth2User, registrationId, providerId);
@@ -303,37 +308,11 @@ public class AuthService {
                             .build());
                 });
 
-        return mapToLoginResponse(user);
+        return mapToLoginResponse(user,response);
     }
 
-//    // Helper to convert User Entity to LoginResponseDTO
-//    private LoginResponseDTO mapToLoginResponse(User user) {
-//        String token = jwtUtil.generateAccessToken(user);
-//
-//        LoginResponseDTO response = new LoginResponseDTO();
-//        response.setUserId(user.getId());
-//        response.setUsername(user.getUsername());
-//        response.setRole(user.getRole());
-//        response.setToken(token);
-//        response.setProviderId(user.getProviderId());
-//
-//        if (user.getPatient() != null) response.setPatientId(user.getPatient().getId());
-//        if (user.getDoctor() != null) response.setDoctorId(user.getDoctor().getId());
-//
-//        return response;
-//    }
-//
-//    // Helper to convert User Entity to SignupResponseDTO
-//    private SignupResponseDTO mapToSignupResponse(User user) {
-//        SignupResponseDTO response = new SignupResponseDTO();
-//        response.setId(user.getId());
-//        response.setUsername(user.getUsername());
-//        response.setRole(user.getRole().name());
-//        return response;
-//    }
 
-
-    private LoginResponseDTO mapToLoginResponse(User user) {
+    private LoginResponseDTO mapToLoginResponse(User user,HttpServletResponse response) {
         String token = jwtUtil.generateAccessToken(user);
 
         String jti = UUID.randomUUID().toString();
@@ -346,28 +325,63 @@ public class AuthService {
             .build();
         refreshTokenRepository.save(refreshToken);
 
-        String refreshToken1 = jwtUtil.generateRefreshToken(user, jti);
+        String refreshTokenString = jwtUtil.generateRefreshToken(user, jti);
+
+        //use cookie service to attach refresh token in cookie 
+        cookieService.attachRefreshCookie(response, refreshTokenString);
         
 
-        LoginResponseDTO response = new LoginResponseDTO();
-        response.setUserId(user.getId());
-        response.setUsername(user.getUsername());
+        LoginResponseDTO responseDTO = new LoginResponseDTO();
+        responseDTO.setUserId(user.getId());
+        responseDTO.setUsername(user.getUsername());
 
         // Since user has many roles, you might want to return the whole set
         // or just the first one if your DTO still expects a single Role.
         if (!user.getRoles().isEmpty()) {
-            response.setRole(user.getRoles().iterator().next());
+            responseDTO.setRole(user.getRoles().iterator().next());
         }
-        response.setRefreshToken(refreshToken1);
-        response.setToken(token);
-        response.setProviderId(user.getProviderId());
+        responseDTO.setRefreshToken(refreshTokenString);
+        responseDTO.setToken(token);
+        responseDTO.setProviderId(user.getProviderId());
 
-        if (user.getPatient() != null) response.setPatientId(user.getPatient().getId());
-        if (user.getDoctor() != null) response.setDoctorId(user.getDoctor().getId());
+        if (user.getPatient() != null) responseDTO.setPatientId(user.getPatient().getId());
+        if (user.getDoctor() != null) responseDTO.setDoctorId(user.getDoctor().getId());
 
-        return response;
+        return responseDTO;
     }
 
+    @Transactional
+    public LoginResponseDTO refreshToken(String refreshTokenString, HttpServletResponse response) {
+        // 1. Extract the JTI from the JWT string to find it in our DB
+
+        String jti = jwtUtil.getJtiFromToken(refreshTokenString);
+
+        // 2. Look up the token in the database
+        RefreshToken oldToken = refreshTokenRepository.findByjti(jti)
+                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+
+        // 3. Security Checks
+        if (oldToken.isRevoked()) {
+            // If someone tries to use a revoked token, logout all sessions for safety
+            refreshTokenRepository.deleteByUser(oldToken.getUser());
+            throw new RuntimeException("Token has been revoked! Potential theft detected.");
+        }
+
+        if (oldToken.getExpiresAt().isBefore(Instant.now())) {
+            refreshTokenRepository.delete(oldToken);
+            throw new RuntimeException("Refresh token expired. Please login again.");
+        }
+
+        // 4. Mark old token as used/revoked (Rotation)
+        oldToken.setRevoked(true);
+        refreshTokenRepository.save(oldToken);
+
+        // 5. Generate a new pair using your existing mapper
+        // This will generate a NEW JTI, a NEW Cookie, and a NEW Access Token
+        return mapToLoginResponse(oldToken.getUser(), response);
+    }
+
+    
     private SignupResponseDTO mapToSignupResponse(User user) {
         SignupResponseDTO response = new SignupResponseDTO();
         response.setId(user.getId());

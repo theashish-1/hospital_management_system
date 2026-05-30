@@ -123,4 +123,13 @@ public class JwtUtil {
         };
     }
 
+    
+    public String getJtiFromToken(String token) {
+    return Jwts.parserBuilder()
+            .setSigningKey(getSigningKey()) // This is why it must be in JwtUtil
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getId(); // This retrieves the 'jti' you set during generation
+}
 }
