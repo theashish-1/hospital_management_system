@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SignupResponseDTO {
-    private Long Id;
+    private Long id;
     private String username;
     private String role;
     private Long patientId;
