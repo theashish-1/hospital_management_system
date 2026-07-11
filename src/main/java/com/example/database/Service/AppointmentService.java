@@ -35,17 +35,17 @@ public class AppointmentService {
         Patient patient = patientRepository.findById(appointment.getPatient_id())
 
                 .orElseThrow( ()-> new RuntimeException("patient not fount"));
-        Doctor doctor = doctorRepository.findById(appointment.getDoctor_id())
+        Doctor doctor = doctorRepository.findById(appointment.getDoctorId())
                 .orElseThrow( ()-> new RuntimeException("doctor not found"));
         //below sql query is StatusNot hence if appointment status is cancelled isAppointmentPresent will be true
         boolean isAppointmentPresent = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatusNot(doctor.getId(),
-                appointment.getDate(),
-                appointment.getTime(),
+                appointment.getAppointmentDate(),
+                appointment.getAppointmentTime(),
                 AppointmentStatus.CANCELLED);
         if (isAppointmentPresent){
             throw new RuntimeException("appointment already booked ");
         }
-        String selectedDay = appointment.getDate().getDayOfWeek().name().toLowerCase();
+        String selectedDay = appointment.getAppointmentDate().getDayOfWeek().name().toLowerCase();
         boolean doctorAvailableDay = doctor.getAvailableDays().stream()
                 .anyMatch(day -> day.equalsIgnoreCase(selectedDay));
         if(doctorAvailableDay == false){
@@ -55,8 +55,8 @@ public class AppointmentService {
         Appointment appointment1 = new Appointment();
         appointment1.setPatient(patient);
         appointment1.setDoctor(doctor);
-        appointment1.setAppointmentTime(appointment.getTime());
-        appointment1.setAppointmentDate(appointment.getDate());
+        appointment1.setAppointmentTime(appointment.getAppointmentTime());
+        appointment1.setAppointmentDate(appointment.getAppointmentDate());
         appointment1.setReason(appointment.getReason());
         appointment1.setStatus(AppointmentStatus.BOOKED);
         Appointment saved =  appointmentRepository.save(appointment1);

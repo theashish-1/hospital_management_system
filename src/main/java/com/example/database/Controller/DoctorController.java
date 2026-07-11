@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController()
 @RequestMapping("/v1/doctor")
 public class DoctorController {

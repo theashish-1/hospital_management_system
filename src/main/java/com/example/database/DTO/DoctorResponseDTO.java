@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class DoctorResponseDTO {
+    private int doctorId;
     private String name;
     private String specialization;
     private int age;

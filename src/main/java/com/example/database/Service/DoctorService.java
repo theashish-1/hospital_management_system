@@ -82,6 +82,7 @@ public class DoctorService {
         List<DoctorViewResponseDTO> doctorViewResponseDTOList = new ArrayList<>();
         for (Doctor doctor : doctors) {
             DoctorViewResponseDTO doctorViewResponseDTO = new DoctorViewResponseDTO();
+            doctorViewResponseDTO.setDoctorId(doctor.getId());
             doctorViewResponseDTO.setName(doctor.getName());
             doctorViewResponseDTO.setSpecialization(doctor.getSpecialization());
             doctorViewResponseDTO.setExperience(doctor.getExperience());
