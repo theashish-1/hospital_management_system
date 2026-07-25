@@ -20,6 +20,8 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 import lombok.extern.slf4j.Slf4j;
+
+import org.hibernate.engine.jdbc.env.internal.LobCreationLogging_.logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -144,12 +146,13 @@ public class AuthService {
             .jti(jti)
             .user(user)
             .createdAt(Instant.now())
-            .expiresAt(Instant.now().plusMillis(30 * 24 * 60 * 60))
+            .expiresAt(Instant.now().plusMillis(30L * 24 * 60 * 60))
             .revoked(false)
             .build();
         refreshTokenRepository.save(refreshToken);
 
         String refreshTokenString = jwtUtil.generateRefreshToken(user, jti);
+        System.out.println("refreshToken is "+refreshTokenString);
 
         //use cookie service to attach refresh token in cookie 
         cookieService.attachRefreshCookie(response, refreshTokenString);
@@ -164,7 +167,9 @@ public class AuthService {
         if (!user.getRoles().isEmpty()) {
             responseDTO.setRole(user.getRoles().iterator().next());
         }
-        responseDTO.setRefreshToken(refreshTokenString);
+        // The refresh token is sent via an HttpOnly cookie, so we don't need it in the body.
+        // responseDTO.setRefreshToken(refreshTokenString); 
+        // responseDTO.setRefreshToken(refreshTokenString);
         responseDTO.setToken(token);
         responseDTO.setProviderId(user.getProviderId());
 
@@ -176,6 +181,9 @@ public class AuthService {
 
     @Transactional
     public LoginResponseDTO refreshToken(String refreshTokenString, HttpServletResponse response) {
+        System.out.println("Refresh Token Received");
+
+        System.out.println(refreshTokenString);
         // 1. Extract the JTI from the JWT string to find it in our DB
 
         String jti = jwtUtil.getJtiFromToken(refreshTokenString);

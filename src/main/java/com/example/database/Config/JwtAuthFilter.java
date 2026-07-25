@@ -1,6 +1,9 @@
 package com.example.database.Config;
 
 import com.example.database.Repository.UserRepository;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +32,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        String path = request.getServletPath();
+
+        if (path.equals("/auth/login")
+                || path.equals("/auth/signup")
+                || path.equals("/auth/refresh")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         final String authHeader = request.getHeader("Authorization");
 
@@ -39,10 +51,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         // Substring(7) is safer than split
         String token = authHeader.substring(7);
-        List<String> roles = jwtUtil.getRolesFromToken(token);
+        
         try {
             String username = jwtUtil.getUsernameFromToken(token);
-
+            List<String> roles = jwtUtil.getRolesFromToken(token);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // This calls your UserDetailsServiceImpl automatically
                 List<SimpleGrantedAuthority> authorities = roles.stream()
@@ -55,8 +67,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-        } catch (Exception e) {
-            log.error("Cannot set user authentication: {}", e.getMessage());
+        } 
+        catch (ExpiredJwtException e) {
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Access Token Expired");
+            return;
+        }
+        catch (JwtException  e) {
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid Token");
+            return;
         }
 
         filterChain.doFilter(request, response);

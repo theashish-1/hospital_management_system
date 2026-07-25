@@ -28,6 +28,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 
 
 @Configuration
@@ -48,9 +50,18 @@ public class SecurityConfig {
                 .csrf(csrf-> csrf.disable())
                 .sessionManagement(sessionConfig->sessionConfig.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/auth/signup","/auth/login","/auth/refresh").permitAll()
+                        .requestMatchers("/auth/signup","/auth/login","/auth/refresh","/error").permitAll()
                         .anyRequest().authenticated()
 
+                )
+                //Exception handler for bad Credentials  
+                .exceptionHandling(exception -> exception
+                    .authenticationEntryPoint((request, response, authException) -> {
+                        // This stops the 302 redirect to Google and sends a clean 401 instead
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"message\": \"Invalid username or password.\"}");
+                    })
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // adding jwtAuthFilter before UsernamePasswordAuthenticationFilter ie.e before going to UsernamePasswordAuthenticationFilter it will check  with jwtAuthFilter
                 .oauth2Login(oAuth2->oAuth2.failureHandler(

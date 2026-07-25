@@ -40,6 +40,10 @@ public class AuthController {
         @CookieValue(name = "refreshToken", required = false) String refreshToken, 
         HttpServletResponse response
     ) {
+
+        System.out.println("========================");
+        System.out.println("INSIDE REFRESH API");
+        System.out.println("========================");
         if (refreshToken == null) {
             return ResponseEntity.status(400).body(null); // This will return a 400 instead of redirecting to Google
         }

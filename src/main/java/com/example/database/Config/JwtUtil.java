@@ -41,7 +41,7 @@ public class JwtUtil {
                 .claim("userId", user.getId().toString())
                 .claim("roles",roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2)) // 2 minutes for testing
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512) // Explicitly set algorithm
                 .compact();
     }
